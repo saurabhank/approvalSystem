@@ -1,0 +1,193 @@
+{
+	"variables": [],
+	"info": {
+		"name": "APPROVAL_SYSTEMS",
+		"_postman_id": "333b60f7-ea6d-8145-3f15-dd6a563fa2fc",
+		"description": "",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "http://localhost:3000/users/add",
+			"request": {
+				"url": "http://localhost:3000/users/add",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"name\": \"John\",\n\t\"userId\": \"John\"\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:3000/users/get",
+			"request": {
+				"url": "http://localhost:3000/users/get",
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:3000/workflow/add",
+			"request": {
+				"url": "http://localhost:3000/workflow/add",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"workFlowId\": \"2\",\n\t\"totalLevels\": 3\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:3000/workflow/get",
+			"request": {
+				"url": "http://localhost:3000/workflow/get",
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:3000/workflow/add/levels",
+			"request": {
+				"url": "http://localhost:3000/workflow/add/levels",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"workFlowId\": 1,\n\t\"approvalType\": \"roundRobin\"\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:3000/workflow/get/levels",
+			"request": {
+				"url": "http://localhost:3000/workflow/get/levels",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"workFlowId\": 1\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:3000/approvers/add",
+			"request": {
+				"url": "http://localhost:3000/approvers/add",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"levelId\": \"1_1\"\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:3000/approvers/add",
+			"request": {
+				"url": "http://localhost:3000/approvers/add",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"levelId\": \"1_1\",\n\t\"userIds\":[\"D Joshi\",\"Elsa Ingram\"]\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:3000/approvers/get",
+			"request": {
+				"url": "http://localhost:3000/approvers/get",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"workFlowId\": 1\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:3000/approvers/approve",
+			"request": {
+				"url": "http://localhost:3000/approvers/approve",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"levelId\": \"1_1\",\n\t\"userId\": \"D Joshi\",\n\t\"status\": 2\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		}
+	]
+}
