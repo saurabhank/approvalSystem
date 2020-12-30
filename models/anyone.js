@@ -10,13 +10,12 @@ let anyone = function (userId, levelId, status) {
 anyone.prototype.addApprover = function (approvers) {
     return new Promise(async (resolve, reject) => {
         try {
-            console.log(approvers)
             insertArr = approvers.map(el => {
                 return {
                     levelId: el.levelId,
                     userId: el.userId,
                     status: el.status,
-                    id: el.levelId+'_' + el.userId
+                    id: el.levelId + '_' + el.userId
                 }
             });
             console.log(insertArr)
@@ -28,35 +27,57 @@ anyone.prototype.addApprover = function (approvers) {
     });
 }
 
-anyone.prototype.approve = async function (status) {
-    let newApprovalLevel = new approvalLevelObj(this.levelId)
-    let approvalLevelData = await newApprovalLevel.getLevelData();
-    if (approvalLevelData.levelNo == (approvalLevelData.currentLevel + 1) && approvalLevelData.status != 2) {
-        let allApprovers = await this.getApprovers()
-        if (allApprovers.indexOf(user.userId) > -1) {
-            await dbUtils.updateData('anyoneApprovals', { status: status }, 'anyoneApprovals.userId = ?',
-                user.userId);
-            let newWorkflow = new workflow(approvalLevelData.workflowId);
-            await newWorkflow.updateCurrentLevel()
-            if (status == 2) {
-                await newWorkflow.updateStatus(2)
+anyone.prototype.approve = function () {
+    return new Promise(async (resolve, reject) => {
+        try {
+            let newApprovalLevel = new approvalLevelObj(this.levelId)
+            let approvalLevelData = await newApprovalLevel.getLevelData();
+            if (approvalLevelData.levelNo == approvalLevelData.currentLevel && approvalLevelData.status != 2) {
+                let allApprovers = await this.getApprovers(approvalLevelData.workFlowId)
+                allApprovers = allApprovers.map(el => {
+                    return el.userId
+                });
+                if (allApprovers.indexOf(this.userId) > -1) {
+                    await dbUtils.updateData('anyoneApprovals', { status: this.status }, 'anyoneApprovals.userId = ?',
+                        this.userId);
+                    let newWorkflow = new workflow(approvalLevelData.workFlowId);
+                    await newWorkflow.updateCurrentLevel(approvalLevelData.currentLevel+1)
+                    if (this.status == 2) {
+                        await newWorkflow.updateStatus(2)
+                    }
+                    resolve("STATUS_UPDATED");
+                } else {
+                    reject("UNAUTHORISED_USER");
+                }
+            } else {
+                if (approvalLevelData.status == 2) {
+                    resolve("WORKFLOW ALREADY TERMINATED")
+                } else {
+                    reject("INVALID_REQUEST");
+                }
             }
-        } else {
-            // unauthorised user 
+        } catch (e) {
+            reject(e);
         }
-    } else {
-        //invalid request
-    }
+
+    });
 
 }
 
-anyone.prototype.getApprovers = async function (workflowId) {
-    let approversData = await dbUtils.getData('workFlows,workFlowLevels,anyoneApprovals', '*',
-        'workFLows.workFlowId = ? and ' +
-        'workFlows.workFlowId = workFlowLevels.workFlowId and ' +
-        'anyoneApprovals.levelId = workFlowLevels.levelId '
-        , workflowId)
-    resolve(approversData)
+anyone.prototype.getApprovers = function (workflowId) {
+    return new Promise(async (resolve, reject) => {
+        try {
+            let approversData = await dbUtils.getData('workFlows,workFlowLevels,anyoneApprovals',
+                'anyoneApprovals.*',
+                'workFlows.workFlowId = ? and ' +
+                'workFlows.workFlowId = workFlowLevels.workFlowId and ' +
+                'anyoneApprovals.levelId = workFlowLevels.levelId '
+                , workflowId)
+            resolve(approversData)
+        }
+        catch (e) { reject(e) }
+    })
+
 }
 
 

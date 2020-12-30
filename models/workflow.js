@@ -3,7 +3,7 @@ const dbUtils = require('../utils/dbUtils')
 let workflow = function (workFlowId, totalLevels) {
     this.workFlowId = workFlowId;
     this.totalLevels = totalLevels;
-    this.currentLevel = -1;
+    this.currentLevel = 1;
     this.status = 0
 }
 
@@ -14,7 +14,7 @@ workflow.prototype.addWorkFlow = function () {
             insertObj = {
                 workFlowId: this.workFlowId,
                 totalLevels: this.totalLevels,
-                currentLevel: 0,
+                currentLevel: 1,
                 status: 0
             }
             await dbUtils.insertRecords('workFlows', insertObj);
@@ -49,11 +49,11 @@ workflow.prototype.getLevels = function () {
     });
 }
 
-workflow.prototype.updateCurrentLevel = function () {
+workflow.prototype.updateCurrentLevel = function (level) {
     return new Promise(async (resolve, reject) => {
         try {
-            let workFlowData = await dbUtils.updateData('workFlows', { currentLevel: 'currentLevel + 1' },
-                'workflow.id = ?', this.id);
+            let workFlowData = await dbUtils.updateData('workFlows', { currentLevel:level  },
+                'workFlows.workFlowId = ?', this.workFlowId);
             resolve(workFlowData);
         } catch (e) {
             reject(e)
@@ -65,7 +65,7 @@ workflow.prototype.updateStatus = function (status) {
     return new Promise(async (resolve, reject) => {
         try {
             let workFlowData = await dbUtils.updateData('workFlows', { status: status },
-                'workflow.id = ?', this.id);
+                'workFlows.workFlowId = ? ', this.workFlowId);
             resolve(workFlowData);
         } catch (e) {
             reject(e)

@@ -13,7 +13,7 @@ roundRobin.prototype.addApprover = function (approvers) {
                     levelId: el.levelId,
                     userId: el.userId,
                     status: el.status,
-                    id: el.userId + '_' +el.levelId
+                    id: el.userId + '_' + el.levelId
                 }
             })
             await dbUtils.insertRecords('roundRobinApprovals', insertArr);
@@ -50,11 +50,7 @@ roundRobin.prototype.approve = async function (status) {
 
 }
 
-roundRobin.prototype.getApprovers = async function () {
-    let approversData = await dbUtils.getData('roundRobinApprovals', '*', 'roundRobinApprovals.levelId = ?',
-        this.levelId)
-    resolve(approversData)
-}
+
 
 roundRobin.prototype.checkAndUpdateLevel = async function (workflow) {
     let approversData = await dbUtils.getData('roundRobinApprovals', '*', 'roundRobinApprovals.levelId = ?',
@@ -70,13 +66,21 @@ roundRobin.prototype.checkAndUpdateLevel = async function (workflow) {
     }
 }
 
-roundRobin.prototype.getApprovers = async function (workflowId) {
-    let approversData = await dbUtils.getData('workFlows,workFlowLevels,roundRobinApprovals', '*',
-        'workFLows.workFlowId = ? and ' +
-        'workFlows.workFlowId = workFlowLevels.workFlowId and ' +
-        'roundRobinApprovals.levelId = workFlowLevels.levelId '
-     , workflowId)
-    resolve(approversData)
+roundRobin.prototype.getApprovers = function (workFlowId) {
+    return new Promise(async (resolve, reject) => {
+        try {
+            let approversData = await dbUtils.getData('workFlows,workFlowLevels,roundRobinApprovals',
+                'roundRobinApprovals.*',
+                'workFlows.workFlowId = ? and ' +
+                'workFlows.workFlowId = workFlowLevels.workFlowId and ' +
+                'roundRobinApprovals.levelId = workFlowLevels.levelId '
+                , workFlowId)
+            resolve(approversData)
+        } catch (e) {
+            reject(e);
+        }
+    })
+
 }
 
 

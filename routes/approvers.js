@@ -4,7 +4,6 @@ const anyone = require('../models/anyone');
 const roundRobin = require('../models/roundRobin');
 const sequence = require('../models/sequenceApprover');
 const level = require('../models/approvalLevel');
-const workflow = require('../models/workflow');
 
 router.post('/add', async (req, res, next) => {
     try {
@@ -40,7 +39,7 @@ router.post('/add', async (req, res, next) => {
             res.json({ success: false, msg: "INVALID DATA" });
             return
         }
-        res.json({ success: true, msg: approvers});
+        res.json({ success: true, msg: approvers });
 
     }
     catch (e) {
@@ -59,8 +58,8 @@ router.post('/get/', async (req, res, next) => {
         let roundRobinApprovers = await newRoundRobin.getApprovers(workFlowId)
         let newAnyone = new anyone()
         let anyoneApprovers = await newAnyone.getApprovers(workFlowId)
-        let sequence = new sequence()
-        sequenceApprovers = sequence.getApprovers(workFlowId)
+        let newSequence = new sequence()
+        sequenceApprovers = await newSequence.getApprovers(workFlowId)
 
         resObj = {
             "anyone": anyoneApprovers,
@@ -77,6 +76,43 @@ router.post('/get/', async (req, res, next) => {
         res.json({
             success: false,
             msg: "UNABLE TO GET WORKFLOW APPROVERS"
+        });
+    }
+});
+
+
+router.post('/approve/', async (req, res, next) => {
+    try {
+        let levelId = req.body.levelId;
+        let userId = req.body.userId;
+        let status = req.body.status;
+        let newLevel = new level(levelId)
+        let levelData = await newLevel.getLevelData(levelId);
+        if (levelData.approvalType == 'anyone') {
+            let newAnyone = new anyone(userId, levelId, status)
+            await newAnyone.approve();
+
+        } else if (levelData.approvalType == 'roundRobin') {
+            let newRoundRobin = new roundRobin()
+        
+        } else if (levelData.approvalType == 'sequence') {
+            let newSequence = new sequence()
+        
+        } else {
+            res.json({ success: false, msg: "INVALID DATA" })
+            return;
+        }
+
+        res.json({
+            success: true,
+            msg: "APPROVAL STATUS UPDATED"
+        });
+    }
+    catch (e) {
+        __error("ERROR WHILE UPDATING STATUS ", e);
+        res.json({
+            success: false,
+            msg: e
         });
     }
 });
