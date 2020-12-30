@@ -1,0 +1,8 @@
+schema
+users : { name , userId } 
+approval types : enum { sequential, roundRobin, anyOne }
+workFlow { workFlowId, totalLevels, currentLevel, status }
+workflow levels { levelId, workFlowId, levelNo, approvalType }
+sequentialApprovals { levelId , userId, sequence, status }
+roundRobinApprovals  { levelId , userId, status }
+anyOneApprovals {levelId , userId, status }

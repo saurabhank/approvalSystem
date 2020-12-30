@@ -1,0 +1,14 @@
+{
+    "database": {
+        "host": "127.0.0.1",
+        "user": "lalla",
+        "password": "lalla",
+        "database": "approvalSystem",
+        "charset": "utf8",
+        "enable": true
+    },
+    "port": 3000,
+    "paths": {
+        "logs": "./logs"
+    }
+}

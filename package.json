@@ -1,0 +1,20 @@
+{
+  "name": "approvalsystem",
+  "version": "1.0.0",
+  "description": "",
+  "main": "'a ticket approval system'",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "test"
+  ],
+  "author": "saurabh",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "deasync": "^0.1.21",
+    "jsonfile": "^6.1.0",
+    "mysql": "^2.18.1"
+  }
+}
